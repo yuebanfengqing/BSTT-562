@@ -9,4 +9,37 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r }
+rm(list = ls())
+library(ggplot2)
+library(data.table)
+
+# read data from github
+
+data <- read.csv('https://raw.githubusercontent.com/yuebanfengqing/BSTT-562/master/data.csv', sep = ',', header = T)
+
+## transform data from wide to long 
+
+zero <- data[,3]
+twenty <- data[,4]
+hundred <- data[,5]
+
+con1 <- cbind(data[,1:2], zero)
+con1$Concentration <- rep(0, 25)
+colnames(con1)[3] <- 'Real'
+
+con2 <- cbind(data[,1:2], twenty)
+con2$Concentration <- rep(20, 25)
+colnames(con2)[3] <- 'Real'
+
+con3 <- cbind(data[,1:2], hundred)
+con3$Concentration <- rep(100, 25)
+colnames(con3)[3] <- 'Real'
+
+p1.data <- rbind(con1, con2, con3)
+head(p1.data)
+```
+
+
+
 # Abstract
