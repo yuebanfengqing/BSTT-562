@@ -2,15 +2,21 @@
 title: "BSTT562 Project I"
 author: "Ruizhe Chen, Hesen Li"
 date: "November 29, 2018"
+documentclass: article
 bibliography: Reference.bib
-output: pdf_document
+output: 
+  pdf_document:
+    number_sections: true
+    citation_package: natbib
+fontsize: 12pt
+geometry: margin = 1in
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r }
+```{r, echo = F}
 rm(list = ls())
 library(ggplot2)
 library(data.table)
@@ -48,6 +54,12 @@ In this project, we want to reproduce the results presented in Table 3 Interlabo
 # Introduction
 
 A key characteristics of the data is its heteroscedasticity.
+
+# Data
+
+# Analysis
+
+# Conclusion
 
 # Reference
 
