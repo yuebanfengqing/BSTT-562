@@ -42,7 +42,7 @@ head(p1.data)
 
 # Abstract
 
-In this project, we want to reproduce the results presented in...
+In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from ... 
 
 # Introduction
 
