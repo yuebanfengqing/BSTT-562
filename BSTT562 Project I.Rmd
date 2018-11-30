@@ -1,0 +1,12 @@
+---
+title: "BSTT562 Project I"
+author: "Ruizhe Chen"
+date: "November 29, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
