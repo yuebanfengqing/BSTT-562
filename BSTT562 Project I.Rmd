@@ -40,6 +40,13 @@ p1.data <- rbind(con1, con2, con3)
 head(p1.data)
 ```
 
-
-
 # Abstract
+
+In this project, we want to reproduce the results presented in...
+
+# Introduction
+
+A key characteristics of the data is its heteroscedasticity.
+
+
+
