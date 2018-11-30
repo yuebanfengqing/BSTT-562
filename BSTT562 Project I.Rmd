@@ -1,6 +1,6 @@
 ---
 title: "BSTT562 Project I"
-author: "Ruizhe Chen"
+author: "Ruizhe Chen, Hesen Li"
 date: "November 29, 2018"
 output: pdf_document
 ---
