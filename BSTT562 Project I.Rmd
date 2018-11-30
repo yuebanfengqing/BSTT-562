@@ -20,10 +20,12 @@ knitr::opts_chunk$set(echo = TRUE)
 rm(list = ls())
 library(ggplot2)
 library(data.table)
-
+library(knitr)
 # read data from github
 
 data <- read.csv('https://raw.githubusercontent.com/yuebanfengqing/BSTT-562/master/data.csv', sep = ',', header = T)
+
+colnames(data) <- c('Lab', 'Replication', '0', '20', '100')
 
 ## transform data from wide to long 
 
@@ -44,18 +46,22 @@ con3$Concentration <- rep(100, 25)
 colnames(con3)[3] <- 'Real'
 
 p1.data <- rbind(con1, con2, con3)
-head(p1.data)
 ```
 
 # Abstract
 
-In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005 
-
+In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005.
 # Introduction
 
-A key characteristics of the data is its heteroscedasticity.
+A key characteristics of the data is its heteroscedasticity. 
 
 # Data
+
+This data is the experimental data fro cadmium from an interlaboratory study conducted by Ford Motor Company (J. Phillips, personal communication). These data were generated as part of a blind interlaboratory study of laboratories that hold Michigan State Drinking Water Certifications for the parameters tested. Samples were prepared by an independent source, randomized, and submitted on a weekly basis over a 5-week period. Cadmium was analyzed by inductively coupled plasma atomic emissions spectroscopy using EPA method 200.7. The dataset used for this example comprised five replicates at each of threee concentrations (0, 20 and 100 $\mu g/L$) in each of the $q = 5$ laboratories. Using the fisrt replicate from the first three laboratories as the new measurement (ie, $q' = 3$), we would like to reproduce the results of point estimates, variances, confidence intervals and simulated confidence levels for the true concentrations in each of the three cases.
+
+```{r, echo = F}
+kable(data, format = 'pandoc')
+```
 
 # Analysis
 
