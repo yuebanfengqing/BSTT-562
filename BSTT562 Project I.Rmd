@@ -2,6 +2,7 @@
 title: "BSTT562 Project I"
 author: "Ruizhe Chen, Hesen Li"
 date: "November 29, 2018"
+bibliography: Reference.bib
 output: pdf_document
 ---
 
@@ -42,7 +43,7 @@ head(p1.data)
 
 # Abstract
 
-In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from ... 
+In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005
 
 # Introduction
 
