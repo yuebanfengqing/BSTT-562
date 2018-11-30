@@ -43,11 +43,11 @@ head(p1.data)
 
 # Abstract
 
-In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005
+In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005 
 
 # Introduction
 
 A key characteristics of the data is its heteroscedasticity.
 
-
+# Reference
 
