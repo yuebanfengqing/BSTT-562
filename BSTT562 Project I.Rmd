@@ -120,15 +120,42 @@ Assuming that observations corresponding to zero or near-zero are available. Let
 
 ### (Partial) Estimation Using Higher-Concentration Observations
 
-(1) Let $z_{ijk} = \frac{(y_{ijk}-\alpha_i)}{x_j}$ and $u_{ijk}=\frac{e_{ijk}}{xj}$. Using the estimate $\hat{\alpha_i}$ of $\alpha_i$ we compute the $z_{ijk}$'s by
+(1) Let $z_{ijk} = \frac{(y_{ijk}-\alpha_i)}{x_j}$ and $u_{ijk}=\frac{e_{ijk}}{xj}$.
 
-$$
-\frac{z_{ijk}}{\beta_i} = e^{\eta_{ijk}} + \frac{u_{ijk}}{\beta_i}.
-$$
+Using the estimate $\hat{\alpha_i}$ of $\alpha_i$ we compute the $z_{ijk}$'s by
+
+\begin{align}
+\begin{split}
+\label{eq8-1}
+y_{ijk} &= \alpha_i + \beta_ix_je^{\eta_{ijk}} + e_{ijk} \\
+y_{ijk} - \alpha_i &= \beta_ix_je^{\eta_{ijk}} + e_{ijk} \\
+\frac{y_{ijk} - \alpha_i}{x_j} &= \beta_ie^{\eta_{ijk}} + \frac{e_{ijk}}{x_j} \ (\text{given} \ x_j's \ \text{have higher concentrations}) \\
+z_{ijk} &= \beta_ie^{\eta_{ijk}} + \mu_{ijk} \\
+\frac{z_{ijk}}{\beta_i} &= e^{\eta_{ijk}} + \frac{\mu_{ijk}}{\beta_i} \ (\text{given} \ \beta_i \neq 0).
+\end{split}
+\end{align}
 
 (2) Let 
 
-$$\gamma=E(e^{\eta})=e^{\sigma_{\eta}^2/2}, \ \mu_{zi}=E(z_{ijk}), \ \sigma_{zi}^2=\frac{\sum_{j=1}^rvar(z_{ijk})}{r}, \ \sigma_{\mu}^2=\frac{\sigma_e^2\sum_{j=1}^{r}1/x_j^2}{r}$$
+\begin{equation}
+\gamma=E(e^{\eta})=e^{\sigma_{\eta}^2/2}, \ \mu_{zi}=E(z_{ijk}), \ \sigma_{zi}^2=\frac{\sum_{j=1}^rvar(z_{ijk})}{r}, \ \sigma_{\mu}^2=\frac{\sigma_e^2\sum_{j=1}^{r}1/x_j^2}{r}
+\end{equation}
+
+Using equation (\ref{eq8-1}) we can calculate
+
+\begin{equation}
+\label{eq10-1}
+\frac{\mu_{zi}}{\beta_i} = \gamma \ \text{and} \ \frac{\sigma_{zi}^2}{\beta_i^2} = (\gamma^4-\gamma^2) + \frac{\sigma_\mu^2}{\beta_i^2}.
+\end{equation}
+
+(3) Replacing $\gamma$ by $\frac{\mu_{zi}}{\beta_i}$ in the second part of equation (\ref{eq10-1}) we obtain the following equation: 
+
+\begin{equation}
+\label{eq11-1}
+\beta_i = \sqrt{\frac{\mu_{zi}^4}{\sigma_{zi}^2-\sigma_\mu^2+\mu_{zi}^2}} \ \text{and} \ \sigma_{\eta}^2 = \frac{2\sum_{i=1}^qln(\mu_{zi}/\beta_i)}{q}.
+\end{equation}
+
+(4) To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need estimates of $\mu_{zi}, \ \sigma_{zi}^2,$ and $\sigma_\mu^2$.  
 
 # Table/Discussion
 
