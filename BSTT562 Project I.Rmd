@@ -65,6 +65,16 @@ kable(data, format = 'pandoc')
 
 # Analysis
 
+We choose the Method of Moments to estimate the model parameters.
+
+Why do we choose the Method of Momemts: A good property of MOM: the estimates obtained by method of moments are asymptotically efficient.
+
+## The Model
+
+\begin{equation}
+y_{ijk} = \alpha_i + \beta_ix_je^{\eta_{ijk}} + e_{ijk}
+\end{equation}
+
 # Conclusion
 
 # Reference
