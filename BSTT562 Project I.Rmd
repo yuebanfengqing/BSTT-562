@@ -57,15 +57,28 @@ A key characteristics of the data is its heteroscedasticity.
 
 # Data
 
-This data is the experimental data fro cadmium from an interlaboratory study conducted by Ford Motor Company (J. Phillips, personal communication). These data were generated as part of a blind interlaboratory study of laboratories that hold Michigan State Drinking Water Certifications for the parameters tested. Samples were prepared by an independent source, randomized, and submitted on a weekly basis over a 5-week period. Cadmium was analyzed by inductively coupled plasma atomic emissions spectroscopy using EPA method 200.7. The dataset used for this example comprised five replicates at each of threee concentrations (0, 20 and 100 $\mu g/L$) in each of the $q = 5$ laboratories. Using the fisrt replicate from the first three laboratories as the new measurement (ie, $q' = 3$), we would like to reproduce the results of point estimates, variances, confidence intervals and simulated confidence levels for the true concentrations in each of the three cases.
+This data is the experimental data fro cadmium from an interlaboratory study conducted by Ford Motor Company (J. Phillips, personal communication). These data were generated as part of a blind interlaboratory study of laboratories that hold Michigan State Drinking Water Certifications for the parameters tested. Samples were prepared by an independent source, randomized, and submitted on a weekly basis over a 5-week period. Cadmium was analyzed by inductively coupled plasma atomic emissions spectroscopy using EPA method 200.7. The dataset used for this example comprised five replicates at each of threee concentrations (0, 20 and 100 $\mu g/L$) in each of the $q = 5$ laboratories. Using the fisrt replicate from the first three laboratories as the new measurement (ie, $q' = 3$), we would like to reproduce the results of point estimates, variances, confidence intervals and simulated confidence levels for the true concentrations in each of the three cases. The data is displayed as follows:
 
 ```{r, echo = F}
-kable(data, format = 'pandoc')
+kable(data, format = 'pandoc', caption = 'Interlaboratory Data for Cadmium (ug / L)')
 ```
+
+# Method
+
+To measure the true concentration of an analyte, $x$, the traditional way is to propose a simple linear calibration model: 
+$$
+y = \alpha + \beta x + e
+$$ 
+with normal assumption on errors. But as the data is hetergeneous, this models fails to explain the increasing measurement variation with increasing analyte concentration commonly observed in analytical data. To overcome this drawback of this simple model, we propose a log-normal model:
+$$
+y
+$$
 
 # Analysis
 
-# Conclusion
+
+
+# Table/Discussion
 
 # Reference
 
