@@ -91,6 +91,13 @@ Data Separation Technique
 y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{jik}} + e_{jik}
 \end{equation}
 
+Note that for this particular model, when $x$ is 0 or near 0, the model is reduced to:
+
+\begin{align}
+y_{ijk} &= \alpha_i + \beta_j \times 0 \times e^{\eta_{jik}} + e_{jik} \\
+y_{ijk} &= \alpha_i + e_{jik} 
+\end{align}
+
 ## The Estimation Procedures
 
 ### (Partial) Estimation Using Low-Concentration Observations
@@ -112,6 +119,8 @@ Assuming that observations corresponding to zero or near-zero are available. Let
 \end{equation}
 
 ### (Partial) Estimation Using Higher-Concentration Observations
+
+Let $z_{ijk} = \frac{(y_{ijk}-\alpha_i)}{x_j}
 
 # Table/Discussion
 
