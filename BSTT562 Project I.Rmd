@@ -57,7 +57,7 @@ A key characteristics of the data is its heteroscedasticity.
 
 # Data
 
-This data is the experimental data fro cadmium from an interlaboratory study conducted by Ford Motor Company (J. Phillips, personal communication). These data were generated as part of a blind interlaboratory study of laboratories that hold Michigan State Drinking Water Certifications for the parameters tested. Samples were prepared by an independent source, randomized, and submitted on a weekly basis over a 5-week period. Cadmium was analyzed by inductively coupled plasma atomic emissions spectroscopy using EPA method 200.7. The dataset used for this example comprised five replicates at each of threee concentrations (0, 20 and 100 $\mu g/L$) in each of the $q = 5$ laboratories. Using the fisrt replicate from the first three laboratories as the new measurement (ie, $q' = 3$), we would like to reproduce the results of point estimates, variances, confidence intervals and simulated confidence levels for the true concentrations in each of the three cases. The data is displayed as follows:
+This data is the experimental data fro cadmium from an interlaboratory study conducted by Ford Motor Company (J. Phillips, personal communication). These data were generated as part of a blind interlaboratory study of laboratories that hold Michigan State Drinking Water Certifications for the parameters tested. Samples were prepared by an independent source, randomized, and submitted on a weekly basis over a 5-week period. Cadmium was analyzed by inductively coupled plasma atomic emissions spectroscopy using EPA method 200.7. The data set used for this example comprised five replicates at each of three concentrations (0, 20 and 100 $\mu g/L$) in each of the $q = 5$ laboratories. Using the first replicate from the first three laboratories as the new measurement (i.e., $q' = 3$), we would like to reproduce the results of point estimates, variances, confidence intervals and simulated confidence levels for the true concentrations in each of the three cases. The data is displayed as follows:
 
 ```{r, echo = F}
 kable(data, format = 'pandoc', caption = 'Interlaboratory Data for Cadmium (ug / L)')
@@ -66,28 +66,54 @@ kable(data, format = 'pandoc', caption = 'Interlaboratory Data for Cadmium (ug /
 # Method
 
 To measure the true concentration of an analyte, $x$, the traditional way is to propose a simple linear calibration model: 
-$$
+
+\begin{equation}
 y = \alpha + \beta x + e
-$$ 
-with normal assumption on errors. But as the data is hetergeneous, this models fails to explain the increasing measurement variation with increasing analyte concentration commonly observed in analytical data. To overcome this drawback of this simple model, we propose a log-normal model:
-$$
+\end{equation}
+
+with normal assumption on errors. But as the data is heterogeneous, this models fails to explain the increasing measurement variation with increasing analyte concentration commonly observed in analytic data. To overcome this drawback of this simple model, we propose a log-normal model:
+
+\begin{equation}
 y = x e^\eta
-$$
+\end{equation}
 
 # Analysis
 
-We choose the Method of Meoments to estimate the model parameters.
+We choose the Method of Moments to estimate the model parameters. The Method of Moments is straightforward and easy to implement when observations with lower concentrations are available, which happens to be the case with our Interlaboratory Data for Cadmium.
 
-Why do we choose the Method ofMoments: A good property of MOM: the estimates obtained by MOM are asymptotically efficient.
+Why do we choose the Method of Moments: A good property of MOM: the estimates obtained by MOM are asymptotically efficient.
+
+Data Separation Technique
 
 ## The model
 
-$$
+\begin{equation}
 y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{jik}} + e_{jik}
-$$
+\end{equation}
 
+## The Estimation Procedures
+
+### (Partial) Estimation Using Low-Concentration Observations
+
+We estimate the variance $\sigma_e^2$ of the additive errors $e_{ijk}$'s (of the $k$th measurement at the $j$th concentration level in the $i$ th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$) that are present primarily at low-level concentrations and the calibration parameter $\alpha_i$ for the $i$th laboratory using low-concentration observations.
+
+Assuming that observations corresponding to zero or near-zero are available. Let $y_{i0k}$ be the $k$th measured concentration corresponding to the true low-level concentration from laboratory $i$ and $n_{i0}$ is the number of samples with true low-level concentrations submitted to laboratory $i$:
+
+(1) Estimate $\sigma_e^2$ by the variance of the observations with zero or near-zero concentrations ($y_{i0k}$) by
+
+\begin{equation}
+\hat{\sigma}_e^2 = \frac{1}{q} \displaystyle \sum_{i = 1}^{q} (\frac{\sum_{k=1}^{n_{i0}}(y_{i0k}-\bar{y}_{i0})^2}{n_{i0}-1})
+\end{equation}
+
+(2) Estimate $\alpha_i$ from the observations with zero or near-zero concentrations ($y_{i0k}$) by 
+
+\begin{equation}
+\hat{\alpha_i} = \frac{\sum_{k=1}^{n_{i0}}y_{i0k}}{n_{i0}}
+\end{equation}
+
+### (Partial) Estimation Using Higher-Concentration Observations
 
 # Table/Discussion
 
-# Reference
+# References
 
