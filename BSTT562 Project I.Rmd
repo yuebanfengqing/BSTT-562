@@ -76,6 +76,7 @@ $$
 
 # Analysis
 
+We choose the method of meoments
 
 
 # Table/Discussion
