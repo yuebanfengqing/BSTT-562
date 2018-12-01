@@ -71,12 +71,14 @@ y = \alpha + \beta x + e
 $$ 
 with normal assumption on errors. But as the data is hetergeneous, this models fails to explain the increasing measurement variation with increasing analyte concentration commonly observed in analytical data. To overcome this drawback of this simple model, we propose a log-normal model:
 $$
-y
+y = x e^\eta
 $$
 
 # Analysis
 
-We choose the method of meoments
+We choose the Method of Meoments to estimate the model parameters.
+
+Why do we choose the Method ofMoments: A good property of MOM: the estimates obtained by MOM are asymptotically efficient.
 
 
 # Table/Discussion
