@@ -80,6 +80,12 @@ We choose the Method of Meoments to estimate the model parameters.
 
 Why do we choose the Method ofMoments: A good property of MOM: the estimates obtained by MOM are asymptotically efficient.
 
+## The model
+
+$$
+y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{jik}} + e_{jik}
+$$
+
 
 # Table/Discussion
 
