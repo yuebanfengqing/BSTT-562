@@ -120,7 +120,15 @@ Assuming that observations corresponding to zero or near-zero are available. Let
 
 ### (Partial) Estimation Using Higher-Concentration Observations
 
-Let $z_{ijk} = \frac{(y_{ijk}-\alpha_i)}{x_j}
+(1) Let $z_{ijk} = \frac{(y_{ijk}-\alpha_i)}{x_j}$ and $u_{ijk}=\frac{e_{ijk}}{xj}$. Using the estimate $\hat{\alpha_i}$ of $\alpha_i$ we compute the $z_{ijk}$'s by
+
+$$
+\frac{z_{ijk}}{\beta_i} = e^{\eta_{ijk}} + \frac{u_{ijk}}{\beta_i}.
+$$
+
+(2) Let 
+
+$$\gamma=E(e^{\eta})=e^{\sigma_{\eta}^2/2}, \ \mu_{zi}=E(z_{ijk}), \ \sigma_{zi}^2=\frac{\sum_{j=1}^rvar(z_{ijk})}{r}, \ \sigma_{\mu}^2=\frac{\sigma_e^2\sum_{j=1}^{r}1/x_j^2}{r}$$
 
 # Table/Discussion
 
