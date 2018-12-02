@@ -88,14 +88,14 @@ Data Separation Technique
 ## The model
 
 \begin{equation}
-y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{jik}} + e_{jik}
+y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{ijk}} + e_{ijk}
 \end{equation}
 
 Note that for this particular model, when $x$ is 0 or near 0, the model is reduced to:
 
 \begin{align}
-y_{ijk} &= \alpha_i + \beta_j \times 0 \times e^{\eta_{jik}} + e_{jik} \\
-y_{ijk} &= \alpha_i + e_{jik} 
+y_{ijk} &= \alpha_i + \beta_j \times 0 \times e^{\eta_{ijk}} + e_{ijk} \\
+y_{ijk} &= \alpha_i + e_{ijk} 
 \end{align}
 
 ## The Estimation Procedures
@@ -155,7 +155,22 @@ Using equation (\ref{eq8-1}) we can calculate
 \beta_i = \sqrt{\frac{\mu_{zi}^4}{\sigma_{zi}^2-\sigma_\mu^2+\mu_{zi}^2}} \ \text{and} \ \sigma_{\eta}^2 = \frac{2\sum_{i=1}^qln(\mu_{zi}/\beta_i)}{q}.
 \end{equation}
 
-(4) To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need estimates of $\mu_{zi}, \ \sigma_{zi}^2,$ and $\sigma_\mu^2$.  
+To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need estimates of $\mu_{zi}, \ \sigma_{zi}^2,$ and $\sigma_\mu^2$ (the error variance of the model (\ref{eq8-1})).  
+
+(4) Let $n_{ij}$ be the number of observations with higher concentrations collected from the $i$th laboratory for concentration level $j$ and $n_i =\sum_{j=1}^r\eta_{ij}$, then
+
+\begin{align}
+\begin{split}
+\hat{\mu}_{z_{ij}}&=\frac{\sum_{k=1}^{n_{ij}}z_{ijk}}{n_{ij}}, \ \hat{\mu}_{z_i}=\frac{\sum_{j=1}^r\hat{\mu}_{z_{ij}}}{r}, \\
+\hat{\sigma}_{zi}^2 &= \frac{\sum_{j=1}^{r} \sum_{k=1}^{\eta_{ij}} (z_{ijk}-\hat{\mu}_{z_{ij}})^2/(\eta_{ij}-1)}{r}, \ \hat{\sigma}_{\mu}^2 = \frac{\sum_{j=1}^r \hat{\sigma}_e^2/x_j^2}{r}
+\end{split}
+\end{align}
+
+(5) Therefore We can calculate the estimates of the variance of the proportional error at higher true concentrations $\sigma_\eta^2$ and the calibration parameter $\beta_i$ for the $i$th laboratory as
+
+\begin{equation}
+\hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
+\end{equation}
 
 # Table/Discussion
 
