@@ -51,6 +51,7 @@ p1.data <- rbind(con1, con2, con3)
 # Abstract
 
 In this project, we want to reproduce the results presented in Table 3 Interlaboratory Data for Cadmium from @Bhaumik2005.
+
 # Introduction
 
 A key characteristics of the data is its heteroscedasticity. 
@@ -63,19 +64,32 @@ This data is the experimental data fro cadmium from an interlaboratory study con
 kable(data, format = 'pandoc', caption = 'Interlaboratory Data for Cadmium (ug / L)')
 ```
 
-# Method
+# The Model
 
-To measure the true concentration of an analyte, $x$, the traditional way is to propose a simple linear calibration model: 
+To measure the true concentration of an analyte, $x$, a simple and straightforward method is to propose a linear calibration model as: 
 
 \begin{equation}
 y = \alpha + \beta x + e
 \end{equation}
 
-with normal assumption on errors. But as the data is heterogeneous, this models fails to explain the increasing measurement variation with increasing analyte concentration commonly observed in analytic data. To overcome this drawback of this simple model, we propose a log-normal model:
+with normal assumption on errors. However because our data set has heteroscedastic variances, this simple linear models fails to explain the increasing measurement variation with increasing analyte concentration, which is also commonly observed in analytic data. On the other hand, a log-linear model, for example, $y = x e^\eta$, where $\eta$ is a normal random variable with mean 0 and standard deviation $\sigma_\eta$ also fails to explain the near-constant measurement variation of $y$ for low true concentration level $(x)$ @Rocke1995. To fix these two problems at the same time, @Bhaumik2005 proposed a log-normal model that combines both types of errors:
 
 \begin{equation}
-y = x e^\eta
+y_{ijk} = \alpha_i + \beta_ix_je^{\eta_{ijk}} + e_{ijk},
 \end{equation}
+
+where $y_{ijk}$ is the $k$th measurement at the $j$th concentration level in the $i$ th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$, $x_j$ is the true concentration at the $j$th level, and $\alpha_i$ and $\beta_i$ are the calibration parameters for the $i$th laboratory.
+
+In this model the $\eta_{ijk}$'s represent proportional error at higher true concentrations, and we assume that the distributions of the proportional errors remain the same for all laboratories.
+
+Note that for this particular model, when $x$ is 0 or near 0, the model is reduced to:
+
+\begin{align}
+\begin{split}
+y_{ijk} &= \alpha_i + \beta_j \times 0 \times e^{\eta_{ijk}} + e_{ijk} \\
+y_{ijk} &= \alpha_i + e_{ijk} 
+\end{split}
+\end{align}
 
 # Analysis
 
@@ -83,22 +97,7 @@ We choose the Method of Moments to estimate the model parameters. The Method of 
 
 Why do we choose the Method of Moments: A good property of MOM: the estimates obtained by MOM are asymptotically efficient.
 
-Data Separation Technique
-
-## The model
-
-\begin{equation}
-y_{ijk} = \alpha_i + \beta_j x_j e^{\eta_{ijk}} + e_{ijk}
-\end{equation}
-
-Note that for this particular model, when $x$ is 0 or near 0, the model is reduced to:
-
-\begin{align}
-y_{ijk} &= \alpha_i + \beta_j \times 0 \times e^{\eta_{ijk}} + e_{ijk} \\
-y_{ijk} &= \alpha_i + e_{ijk} 
-\end{align}
-
-## The Estimation Procedures
+## The Parameter Estimation Procedures (Using Data Separation Technique)
 
 ### (Partial) Estimation Using Low-Concentration Observations
 
@@ -171,6 +170,10 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \begin{equation}
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
+
+## Point Estimation of $X$
+
+Suppose that the same analyte with an unknown true concentration $X$ is tested in $q^{'}$ independent laboratories, and that $Y_1,Y_2,...,Y_{q^{'}}$ are the corresponding new observations. We want to compute a point estimate of $X$ using the available information from each of the $q^{'}$ laboratories and then combine them.
 
 # Table/Discussion
 
