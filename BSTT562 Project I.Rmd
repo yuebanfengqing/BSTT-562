@@ -381,7 +381,7 @@ c3i2 <- log((1 + sqrt(1 + 4*c2i)) / 2)
 
 ## Variance of $X$
 
-Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100ug/L true concentration level, respectively.
+Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100 $\mu g/L$ true concentration level, respectively.
 
 ## Confidence Interval of $X$
 
