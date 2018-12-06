@@ -173,9 +173,8 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
 
-<<<<<<< HEAD
 ## Point Estimation Of $X$
-=======
+
 ```{r, echo = FALSE}
 low <- p1.data[p1.data$Concentration == 0,]
 
@@ -285,7 +284,6 @@ gamma
 ```
 
 ## Point Estimation of $X$
->>>>>>> 9adcde8456df555ed04004f146878bd442565a4b
 
 Suppose that the same analyte with an unknown true concentration $X$ is tested in $q^{'}$ independent laboratories, and that $Y_1,Y_2,...,Y_{q^{'}}$ are the corresponding new observations. We want to compute a point estimate of $X$ using the available information from each of the $q^{'}$ laboratories and then combine them. Following model (\ref{eq-2a}), we can obtain
 
