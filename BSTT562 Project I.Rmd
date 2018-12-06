@@ -21,6 +21,7 @@ rm(list = ls())
 library(ggplot2)
 library(data.table)
 library(knitr)
+options(digits = 4)
 # read data from github
 
 data <- read.csv('https://raw.githubusercontent.com/yuebanfengqing/BSTT-562/master/data.csv', sep = ',', header = T)
@@ -171,11 +172,230 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
 
+```{r, echo = FALSE}
+low <- p1.data[p1.data$Concentration == 0,]
+
+ave <- 0
+for (i in 1:max(low$Lab)) {
+  ave[i] <- mean(low$Real[low$Lab == i])
+}
+
+low$y_mean <- rep(ave, each = max(low$Lab))
+
+sigma_e2 <- 0
+for (i in 1:max(low$Lab)) {
+  sigma_i <- sum(sum((low$Real[low$Lab == i] - low$y_mean[low$Lab == i])^2) / 4) / 5
+  sigma_e2 <- sigma_e2 + sigma_i
+}
+
+sigma_e2 # estimate of sigma_e2
+alpha_i <- ave # estimates of alpha_i
+
+low$alpha_i <- rep(alpha_i, each = max(low$Lab))
+
+########################### estimation for the higher concentrations ######################
+##################################### beta_i, sigma_eta2 ##################################
+
+higher <- p1.data[p1.data$Concentration != 0, ]
+
+for (i in 1:max(higher$Lab)) {
+  higher$alpha_i[higher$Lab == i] <- alpha_i[i]
+}
+
+
+higher$z_ijk <- (higher$Real - higher$alpha_i) / higher$Concentration # z_ijk
+
+twenty <- higher[higher$Concentration == 20,]
+hundred <- higher[higher$Concentration == 100, ]
+
+n_ij <- 5
+
+mu_zij20 = 0
+for (i in 1:max(twenty$Lab)) {
+  mu_zij20[i] <- sum(twenty$z_ijk[twenty$Lab == i]) / n_ij
+}
+mu_zij20 # mu_zij for 100 ug / L
+
+mu_zij100 = 0
+for (i in 1:max(hundred$Lab)) {
+  mu_zij100[i] <- sum(hundred$z_ijk[hundred$Lab == i]) / n_ij
+}
+mu_zij100 # mu_zij for 100 ug / L
+
+mu_zi = (mu_zij20 + mu_zij100) / 2 
+mu_zi # mu_zi
+
+twenty$mu_zij <- rep(mu_zij20, each = max(twenty$Lab))
+hundred$mu_zij <- rep(mu_zij100, each = max(hundred$Lab))
+
+sigma_zi220 <- 0
+for (i in 1:max(twenty$Lab)) {
+  sigma_zi220[i] <- sum((twenty$z_ijk[twenty$Lab == i] - twenty$mu_zij[twenty$Lab == i])^2 / (n_ij - 1))
+}
+
+sigma_zi220 # sigma_zi220
+
+sigma_zi2100 <- 0
+for (i in 1:max(hundred$Lab)) {
+  sigma_zi2100[i] <- sum((hundred$z_ijk[hundred$Lab == i] - hundred$mu_zij[hundred$Lab == i])^2 / (n_ij - 1))
+}
+
+sigma_zi2100 # sigma_zi2100
+
+sigma_zi2 <- (sigma_zi220 + sigma_zi2100) / 2 
+
+sigma_u2 <- sigma_e2 * (1 / 20^2 + 1 / 100^2) / 2 # sigma_u2
+
+beta_i <- sqrt(mu_zi^4 / (sigma_zi2 - sigma_u2 + mu_zi^2))
+
+beta_i # beta_i
+
+low$beta_i <- rep(beta_i, each = max(low$Lab))
+twenty$beta_i <- rep(beta_i, each = max(twenty$Lab))
+hundred$beta_i <- rep(beta_i, each = max(hundred$Lab))
+
+sigma_eta2 <- 2 * sum(log(mu_zi / beta_i)) / 5 # sigma_eta2
+
+gamma <- exp(sigma_eta2 / 2)
+
+# table of parameter estmates
+
+# alpha_i: 
+alpha_i
+# beta_i:
+beta_i
+# mu_zij:
+cbind(c('20 ug/L', '100 ug/L'),rbind(mu_zij20, mu_zij100))
+# m_zi:
+mu_zi
+#sigma_zi:
+sigma_zi2
+# sigma_e2:
+sigma_e2
+# sigma_u2:
+sigma_u2
+# sigma_eta2:
+sigma_eta2
+# gamma:
+gamma
+```
+
 ## Point Estimation of $X$
 
 Suppose that the same analyte with an unknown true concentration $X$ is tested in $q^{'}$ independent laboratories, and that $Y_1,Y_2,...,Y_{q^{'}}$ are the corresponding new observations. We want to compute a point estimate of $X$ using the available information from each of the $q^{'}$ laboratories and then combine them.
 
+```{r, echo = TRUE}
+########################### estimation of x ###############################
+########## choose 1st observation of each lab as new observation ##########
+
+## 0 ug / L
+
+## point estimate 
+
+y1 <- low[1,]
+y2 <- low[6,]
+y3 <- low[11,]
+
+x <- function(y, alpha, beta, gamma) {
+  xi_hat <- (y - alpha) / (beta * gamma)
+}
+
+x1 <- x(y1$Real, y1$alpha_i, y1$beta_i, gamma)
+x2 <- x(y2$Real, y2$alpha_i, y2$beta_i, gamma)
+x3 <- x(y3$Real, y3$alpha_i, y3$beta_i, gamma)
+x_hat <- (x1 + x2 + x3) / 3
+x_hat
+
+## variance
+
+variance <- (sigma_e2 / (y1$beta_i^2 * gamma^2)*(1 + 1 / 5) + sigma_e2 / (y2$beta_i^2 * gamma^2)*(1 + 1 / 5) +
+                sigma_e2 / (y2$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2 + 
+  0^2 * (gamma^2 - 1) / 3
+
+## confidence interval
+y_bar <- ( y1$Real + y2$Real + y3$Real ) / 3
+sigma_alpha2 <- var(low$alpha_i)
+
+cll <- max(0, y_bar - 1.96*sqrt((sigma_e2 + sigma_alpha2)/ 3))
+clu <- y_bar + 1.96 * sqrt((sigma_e2 + sigma_alpha2) /3)
+
+CL_low <- c(cll, clu)
+
+# 20 ug / L
+
+## point estimate
+
+y12 <- twenty[1,]
+y22 <- twenty[6,]
+y32 <- twenty[11,]
+
+x12 <- x(y12$Real, y12$alpha_i, y12$beta_i, gamma)
+x22 <- x(y22$Real, y22$alpha_i, y22$beta_i, gamma)
+x32 <- x(y32$Real, y32$alpha_i, y32$beta_i, gamma)
+x_hat2 <- (x12 + x22 + x32) / 3
+x_hat2
+
+## variance
+
+variance2 <- (sigma_e2 / (y12$beta_i^2 * gamma^2)*(1 + 1 / 5) + sigma_e2 / (y22$beta_i^2 * gamma^2)*(1 + 1 / 5) +
+  sigma_e2 / (y32$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2 + 
+  20^2 * (gamma^2 - 1) / 3
+
+## confidence interval
+
+X1 <- 20
+
+c1i <- beta_i^2 * X1^2 * (gamma^4 - gamma^2) + sigma_e2
+c2i <- c1i / (beta_i^2*X1^2)
+c3i <- log((1 + sqrt(1 + 4*c2i)) / 2)
+
+# 100 ug / L 
+
+## point estimate
+
+y13 <- hundred[1,]
+y23 <- hundred[6,]
+y33 <- hundred[11,]
+
+x13 <- x(y13$Real, y13$alpha_i, y13$beta_i, gamma)
+x23 <- x(y23$Real, y23$alpha_i, y23$beta_i, gamma)
+x33 <- x(y33$Real, y33$alpha_i, y33$beta_i, gamma)
+x_hat3 <- (x13 + x23 + x33) / 3
+x_hat3
+
+## variance
+
+variance3 <- (sigma_e2 / (y13$beta_i^2 * gamma^2)*(1 + 1 / 5) + sigma_e2 / (y23$beta_i^2 * gamma^2)*(1 + 1 / 5) +
+                sigma_e2 / (y33$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2 + 
+  100^2 * (gamma^2 - 1) / 3
+
+## confidence interval
+
+X2 <- 100
+
+c1i2 <- beta_i^2 * X2^2 * (gamma^4 - gamma^2) + sigma_e2
+c2i2 <- c1i / (beta_i^2*X2^2)
+c3i2 <- log((1 + sqrt(1 + 4*c2i)) / 2)
+
+```
+
+## Variance of $X$
+
+Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100ug/L true concentration level, respectively.
+
+## Confidence Interval of $X$
+
 # Table/Discussion
+
+```{r, echo = T}
+## make a table
+
+x <- matrix(c(x_hat, variance, x_hat2, variance2, x_hat3, variance3), 3, 2, byrow = T)
+x <- as.matrix(cbind(c('0 ug/L', '20 ug/L', '100 ug/L'), round(x, 3)))
+colnames(x) <- c('True Concentration','X_hat', 'Var(X)')
+kable(x, format = 'pandoc')
+
+```
 
 # References
 
