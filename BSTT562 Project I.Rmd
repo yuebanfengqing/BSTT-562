@@ -433,13 +433,31 @@ $$
 
 $\hat{\sigma}_{\alpha}^2$ represents the variability of $\alpha_i$ across all $q$ laboratories in the calibration sample.
 
-Secondly, to construct a confidence region for larger $X$, we use the following lognormal approximation. Let 
+Secondly, to construct a confidence region for larger $X$, \cite{Bhaumik2005} used the following lognormal approximation. Let 
 
 $$
 c_{1i} = var(Y_i) = \beta^2_iX^2(\gamma^4-\gamma^2)+\sigma_e^2, c_{2i} = \frac{c_{1i}}{\beta_2^iX^2}, and \ c_{3i} = ln(\frac{1+\sqrt{1+4c_{2i}}}{2}).
 $$
 
 \cite{Bhaumik2005} also showed in a lemma that the approximate variance of $ln(\frac{Y-\alpha_i}{\beta_iX})$ is $c_{3i}$.
+
+\textit{Lemma 1.} Suppose that for an unknown concentration $X$, the corresponding observation $Y_i$ collected from the $i$th laboratory follows model (\ref{eq-2a}). Define $V_i = ln(\frac{Y_i-\alpha_i}{\beta_iX}).$ For a larger concentration $X$, the approximate variance of $V_i$ is $c_{3i}.$ 
+
+\textit{Proof.} For a larger concentration $X$, the corresponding $e_i$ in model (\ref{eq-2a}) becomes insignificant compared to $Xe^{\eta_i}$, and hence the approximate distribution of $(\frac{Y_i-\alpha_i}{\beta_iX})$ is lognormal. Using the expression for the variance of a lognormal distribution, $c_{2i}=var(\frac{Y_i-\alpha_i}{\beta_iX})$ can be expressed as $v^2-v,$ for a positive number $v.$ The positive root of the quadratic equation $c_{2i}=v^2-v$ is $\frac{1+\sqrt{1+4c_{2i}}}{2},$ and hence the variance of $ln(\frac{Y_i-\alpha_i}{\beta_iX})$ is $c_{3i}.$
+
+Let
+
+\begin{equation}
+\label{eq-14a}
+Z_i(X) = \frac{ln(Y_i-\alpha_i)-ln(\beta_iX)}{\sqrt{c_{3i}}}.
+\end{equation}
+
+Thus $Z_i(X)\sim N(0,1)$ and the approximate distribution of $Z(X)=\sum_{i=1}^{q^{'}} Z_i(X)/\sqrt{q^{'}} \sim N(0,1),$ where $N(0,1)$ denotes a standard normal distribution. We replace the parameters on the right side of (\ref{eq-14a}) by their corresponding estimates to compute their numerical values. Thus the $(1-\alpha)100\%$ confidence region for $X$ is 
+
+\begin{equation}
+\label{eq-15a}
+\mathcal{R}(X) = \left\{X: -Z_{\alpha/2} \leq Z(X) \leq Z_{\alpha/2} \right\}.
+\end{equation}
 
 # Table/Discussion
 
