@@ -631,11 +631,13 @@ Thus $Z_i(X)\sim N(0,1)$ and the approximate distribution of $Z(X)=\sum_{i=1}^{q
 
 ```{r, echo = T}
 ## make a table
-x <- matrix(round(c(x_hat, variance, cll, clu, scl_low, x_hat2, variance2, cll20, clu20, NA,
-              x_hat3, variance3, cll100, clu100, NA), 4), 
+x <- matrix(round(c(x_hat, variance, cll, clu, scl_low, x_hat2, 
+                    variance2, cll20, clu20, NA,
+                    x_hat3, variance3, cll100, clu100, NA), 4), 
             3, 5, byrow = T)
 x <- as.matrix(cbind(c('0 ug/L', '20 ug/L', '100 ug/L'), x))
-colnames(x) <- c('True Concentration','X_hat', 'Var(X)', 'Lower Bound', 'Upper Bound', 'SCL')
+colnames(x) <- c('True Concentration','X_hat', 'Var(X)', 'Lower Bound',
+                 'Upper Bound', 'SCL')
 kable(x, format = 'pandoc')
 
 ```
