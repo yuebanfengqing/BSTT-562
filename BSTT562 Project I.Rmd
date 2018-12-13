@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 rm(list = ls())
 library(knitr)
 options(digits = 4)
-set.seed(2141)
+set.seed(2111)
 # read data from github
 
 data <- read.csv('https://raw.githubusercontent.com/yuebanfengqing/BSTT-562/master/data.csv', sep = ',', header = T)
@@ -70,14 +70,14 @@ To measure the true concentration of an analyte, $x$, a simple and straightforwa
 y = \alpha + \beta x + e
 \end{equation}
 
-with normal assumption on errors. However because our data set has heteroscedastic variances, this simple linear models fails to explain the increasing measurement variation with increasing analyte concentration, which is also commonly observed in analytic data. On the other hand, a log-linear model, for example, $y = x e^\eta$, where $\eta$ is a normal random variable with mean 0 and standard deviation $\sigma_\eta$ also fails to explain the near-constant measurement variation of $y$ for low true concentration level $(x)$ @Rocke1995. To fix these two problems at the same time, @Bhaumik2005 proposed a log-normal model that combines both types of errors:
+with normal assumption on errors. However, because our data set has heteroscedastic variances, this simple linear models fails to explain the increasing measurement variation with increasing analyte concentration, which is also commonly observed in analytic data. On the other hand, a log-linear model, for example, $y = x e^\eta$, where $\eta$ is a normal random variable with mean 0 and standard deviation $\sigma_\eta$ also fails to explain the near-constant measurement variation of $y$ for low true concentration level $(x)$ (@Rocke1995). To fix these two problems at the same time, @Bhaumik2005 proposed a log-normal model that combines both types of errors:
 
 \begin{equation}
 \label{eq-2a}
 y_{ijk} = \alpha_i + \beta_ix_je^{\eta_{ijk}} + e_{ijk},
 \end{equation}
 
-where $y_{ijk}$ is the $k$th measurement at the $j$th concentration level in the $i$ th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$, $x_j$ is the true concentration at the $j$th level, and $\alpha_i$ and $\beta_i$ are the calibration parameters for the $i$th laboratory.
+where $y_{ijk}$ is the $k$-th measurement at the $j$-th concentration level in the $i$-th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$, $x_j$ is the true concentration at the $j$-th level, and $\alpha_i$ and $\beta_i$ are the calibration parameters for the $i$-th laboratory.
 
 In this model the $\eta_{ijk}$'s represent proportional error at higher true concentrations, and we assume that the distributions of the proportional errors remain the same for all laboratories.
 
@@ -92,13 +92,13 @@ y_{ijk} &= \alpha_i + e_{ijk}
 
 # Analysis
 
-We choose the Method of Moments to estimate the model parameters. We choose the Method of Moments because it is straightforward and easy to implement when observations with lower concentrations are available, which happens to be the case with our Interlaboratory Data for Cadmium. Besides, the estimates obtained by Method of Moments are asymptotically efficient.
+We choose the Method of Moments to estimate the model parameters since it is straightforward and easy to implement when observations with lower concentrations are available, which happens to be the case with our Interlaboratory Data for Cadmium. Besides, the estimates obtained by Method of Moments are asymptotically efficient.
 
 ## The Parameter Estimation Procedures (Using Data Separation Technique)
 
 ### (Partial) Estimation Using Low-Concentration Observations
 
-We estimate the variance $\sigma_e^2$ of the additive errors $e_{ijk}$'s (of the $k$th measurement at the $j$th concentration level in the $i$ th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$) that are present primarily at low-level concentrations and the calibration parameter $\alpha_i$ for the $i$th laboratory using low-concentration observations.
+We estimate the variance $\sigma_e^2$ of the additive errors $e_{ijk}$'s (of the $k$-th measurement at the $j$-th concentration level in the $i$-th laboratory, $i=1,2,...,q, j = 1,2,...,r, k=1,2,...,N_{ij}$) that are present primarily at low-level concentrations and the calibration parameter $\alpha_i$ for the $i$-th laboratory using low-concentration observations.
 
 Assuming that observations corresponding to zero or near-zero are available. Let $y_{i0k}$ be the $k$th measured concentration corresponding to the true low-level concentration from laboratory $i$ and $n_{i0}$ is the number of samples with true low-level concentrations submitted to laboratory $i$:
 
@@ -153,7 +153,7 @@ Using equation (\ref{eq8-1}) we can calculate
 
 To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need estimates of $\mu_{zi}, \ \sigma_{zi}^2,$ and $\sigma_\mu^2$ (the error variance of the model (\ref{eq8-1})).  
 
-(4) Let $n_{ij}$ be the number of observations with higher concentrations collected from the $i$th laboratory for concentration level $j$ and $n_i =\sum_{j=1}^r\eta_{ij}$, then
+(4) Let $n_{ij}$ be the number of observations with higher concentrations collected from the $i$-th laboratory for concentration level $j$ and $n_i =\sum_{j=1}^r\eta_{ij}$, then
 
 \begin{align}
 \begin{split}
@@ -162,13 +162,11 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \end{split}
 \end{align}
 
-(5) Therefore We can calculate the estimates of the variance of the proportional error at higher true concentrations $\sigma_\eta^2$ and the calibration parameter $\beta_i$ for the $i$th laboratory as
+(5) Therefore We can calculate the estimates of the variance of the proportional error at higher concentrations $\sigma_\eta^2$ and the calibration parameter $\beta_i$ for the $i$-th laboratory as
 
 \begin{equation}
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
-
-## Point Estimation Of $X$
 
 ```{r, echo = FALSE}
 low <- p1.data[p1.data$Concentration == 0,]
@@ -187,7 +185,7 @@ for (i in 1:max(low$Lab)) {
   sigma_e2 <- sigma_e2 + sigma_i
 }
 
-sigma_e2 # estimate of sigma_e2
+# sigma_e2 # estimate of sigma_e2
 alpha_i <- ave # estimates of alpha_i
 
 low$alpha_i <- rep(alpha_i, each = max(low$Lab))
@@ -209,20 +207,20 @@ hundred <- higher[higher$Concentration == 100, ]
 
 n_ij <- 5
 
-mu_zij20 = 0
+mu_zij20 <- 0
 for (i in 1:max(twenty$Lab)) {
   mu_zij20[i] <- sum(twenty$z_ijk[twenty$Lab == i]) / n_ij
 }
-mu_zij20 # mu_zij for 100 ug / L
+# mu_zij20 # mu_zij for 100 ug / L
 
-mu_zij100 = 0
+mu_zij100 <- 0
 for (i in 1:max(hundred$Lab)) {
   mu_zij100[i] <- sum(hundred$z_ijk[hundred$Lab == i]) / n_ij
 }
-mu_zij100 # mu_zij for 100 ug / L
+# mu_zij100 # mu_zij for 100 ug / L
 
 mu_zi = (mu_zij20 + mu_zij100) / 2 
-mu_zi # mu_zi
+# mu_zi # mu_zi
 
 twenty$mu_zij <- rep(mu_zij20, each = max(twenty$Lab))
 hundred$mu_zij <- rep(mu_zij100, each = max(hundred$Lab))
@@ -233,14 +231,14 @@ for (i in 1:max(twenty$Lab)) {
                            twenty$mu_zij[twenty$Lab == i])^2 / (n_ij - 1))
 }
 
-sigma_zi220 # sigma_zi220
+# sigma_zi220 # sigma_zi220
 
 sigma_zi2100 <- 0
 for (i in 1:max(hundred$Lab)) {
   sigma_zi2100[i] <- sum((hundred$z_ijk[hundred$Lab == i] - hundred$mu_zij[hundred$Lab == i])^2 / (n_ij - 1))
 }
 
-sigma_zi2100 # sigma_zi2100
+# sigma_zi2100 # sigma_zi2100
 
 sigma_zi2 <- (sigma_zi220 + sigma_zi2100) / 2 
 
@@ -248,7 +246,7 @@ sigma_u2 <- sigma_e2 * (1 / 20^2 + 1 / 100^2) / 2 # sigma_u2
 
 beta_i <- sqrt(mu_zi^4 / (sigma_zi2 - sigma_u2 + mu_zi^2))
 
-beta_i # beta_i
+# beta_i # beta_i
 
 low$beta_i <- rep(beta_i, each = max(low$Lab))
 twenty$beta_i <- rep(beta_i, each = max(twenty$Lab))
@@ -259,25 +257,25 @@ sigma_eta2 <- 2 * sum(log(mu_zi / beta_i)) / 5 # sigma_eta2
 gamma <- exp(sigma_eta2 / 2)
 
 # table of parameter estmates
-
-# alpha_i: 
-alpha_i
-# beta_i:
-beta_i
-# mu_zij:
-cbind(c('20 ug/L', '100 ug/L'),rbind(mu_zij20, mu_zij100))
-# m_zi:
-mu_zi
-#sigma_zi:
-sigma_zi2
-# sigma_e2:
-sigma_e2
-# sigma_u2:
-sigma_u2
-# sigma_eta2:
-sigma_eta2
-# gamma:
-gamma
+# 
+# # alpha_i: 
+# alpha_i
+# # beta_i:
+# beta_i
+# # mu_zij:
+# cbind(c('20 ug/L', '100 ug/L'),rbind(mu_zij20, mu_zij100))
+# # m_zi:
+# mu_zi
+# #sigma_zi:
+# sigma_zi2
+# # sigma_e2:
+# sigma_e2
+# # sigma_u2:
+# sigma_u2
+# # sigma_eta2:
+# sigma_eta2
+# # gamma:
+# gamma
 ```
 
 ## Point Estimation of $X$
@@ -288,7 +286,7 @@ $$
 E(Y_i) = \alpha_i + \beta_iX\gamma,
 $$
 
-and hence an estimate of $X$ from the $i$th laboratory, denoted by $\hat{X}_i$, is
+and hence an estimate of $X$ from the $i$-th laboratory, denoted by $\hat{X}_i$, is
 
 \begin{equation}
 \hat{X}_i = \frac{Y_i-\hat{\alpha}_i}{\hat{\beta}_i\hat{\gamma}} \ \text{and} \ \hat{X} = \displaystyle\sum_{i=1}^{q^{'}} \frac{\hat{X}_i}{q^{'}},
@@ -326,7 +324,7 @@ x1 <- x(y1$Real, y1$alpha_i, y1$beta_i, gamma)
 x2 <- x(y2$Real, y2$alpha_i, y2$beta_i, gamma)
 x3 <- x(y3$Real, y3$alpha_i, y3$beta_i, gamma)
 x_hat <- (x1 + x2 + x3) / 3
-x_hat
+# x_hat
 
 ```
 
@@ -335,10 +333,10 @@ x_hat
 ```{r, echo = TRUE, warning = FALSE}
 ## variance
 
-variance <- (sigma_e2 / (y1$beta_i^2 * gamma^2)*(1 + 1 / 5) 
+variance <- ((sigma_e2 / (y1$beta_i^2 * gamma^2)*(1 + 1 / 5) 
              + sigma_e2 / (y2$beta_i^2 * gamma^2)*(1 + 1 / 5) 
              + sigma_e2 / (y2$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2 
-             + 0^2 * (gamma^2 - 1) / 3
+             + 0^2 * (gamma^2 - 1) / 3)
 
 ## confidence interval
 y_bar <- ( y1$Real + y2$Real + y3$Real ) / 3
@@ -347,7 +345,7 @@ sigma_alpha2 <- var(alpha_i)
 cll <- max(0, y_bar - 1.96*sqrt((sigma_e2 + sigma_alpha2)/ 3))
 clu <- y_bar + 1.96 * sqrt((sigma_e2 + sigma_alpha2) /3)
 
-CL_low <- c(cll, clu)
+CL_low <- round(c(cll, clu), 3)
 
 # 20 ug / L
 
@@ -361,14 +359,14 @@ x12 <- x(y12$Real, y12$alpha_i, y12$beta_i, gamma)
 x22 <- x(y22$Real, y22$alpha_i, y22$beta_i, gamma)
 x32 <- x(y32$Real, y32$alpha_i, y32$beta_i, gamma)
 x_hat2 <- (x12 + x22 + x32) / 3
-x_hat2
+# x_hat2
 
 ## variance
 
-variance2 <- (sigma_e2 / (y12$beta_i^2 * gamma^2)*(1 + 1 / 5) 
+variance2 <- ((sigma_e2 / (y12$beta_i^2 * gamma^2)*(1 + 1 / 5) 
               + sigma_e2 / (y22$beta_i^2 * gamma^2)*(1 + 1 / 5) 
               + sigma_e2 / (y32$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2 
-              + 20^2 * (gamma^2 - 1) / 3
+              + 20^2 * (gamma^2 - 1) / 3)
 
 ## confidence interval
 
@@ -406,9 +404,9 @@ f2 <- function (x) {
 
 # solve for x
 
-clu20<- uniroot(f2, lower = 0.1, upper = 10000000)$root
+clu20 <- uniroot(f2, lower = 0.1, upper = 10000000)$root
 
-CL_20 <- c(cll20, clu20)
+CL_20 <- round(c(cll20, clu20), 3)
 
 # 100 ug / L 
 
@@ -422,13 +420,13 @@ x13 <- x(y13$Real, y13$alpha_i, y13$beta_i, gamma)
 x23 <- x(y23$Real, y23$alpha_i, y23$beta_i, gamma)
 x33 <- x(y33$Real, y33$alpha_i, y33$beta_i, gamma)
 x_hat3 <- (x13 + x23 + x33) / 3
-x_hat3
+# x_hat3
 
 ## variance
 
-variance3 <- (sigma_e2 / (y13$beta_i^2 * gamma^2)*(1 + 1 / 5) 
+variance3 <- ((sigma_e2 / (y13$beta_i^2 * gamma^2)*(1 + 1 / 5) 
               + sigma_e2 / (y23$beta_i^2 * gamma^2)*(1 + 1 / 5) 
-              + sigma_e2 / (y33$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2  + 100^2 * (gamma^2 - 1) / 3
+              + sigma_e2 / (y33$beta_i^2 * gamma^2)*(1 + 1 / 5)) / 3^2  + 100^2 * (gamma^2 - 1) / 3)
 
 ## confidence interval
 
@@ -468,7 +466,7 @@ f4 <- function (x) {
 
 clu100 <- uniroot(f4, lower = 0.1, upper = 10000000)$root
 
-CL_100 <- c(cll100, clu100)
+CL_100 <- round(c(cll100, clu100), 3)
 
 ```
 
@@ -481,13 +479,16 @@ x <- function(y, alpha, beta, gamma) {
 ## simulated confidence level
 
 scl_low <- numeric(1000)
+scl_twenty <- numeric(1000)
+scl_hundred <- numeric(1000)
 alpha_i_sim <- matrix(NA, 1000, 5)
 gamma_sim <- numeric(1000)
 beta_i_sim <- matrix(NA, 1000, 5)
 sigma_e2_sim <- numeric(1000)
 x_hat_real <- numeric(1000)
+x_hat_real_twenty <- numeric(1000)
+x_hat_real_hundred <- numeric(1000)
 for (i in 1 : 1000) {
-  
 y_LOW<- matrix(NA, 5, 5)
 for (j in 1:5) { # lab
   for (k in 1:5) { # replication
@@ -579,16 +580,181 @@ x_hat_real[i] <- (x1_real + x2_real + x3_real) / 3
 if ((x_hat_real < clu_sim) & (x_hat_real > cll_sim)) {
   scl_low[i] <- 1
 }
+
+## Simulated Confidence interval for 20 ug / L concentration
+
+y1_sim_twenty <- y_twenty[m[1], m[2]]
+y2_sim_twenty <- y_twenty[n[1], n[2]]
+y3_sim_twenty <- y_twenty[o[1], o[2]]
+
+## Real X hat
+y1_real_twenty <- twenty[m[1]*m[2], ]$Real
+y2_real_twenty <- twenty[n[1]*n[2], ]$Real
+y3_real_twenty <- twenty[o[1]*o[2], ]$Real
+
+x1_real_twenty <- x(y1_real_twenty, alpha_i[m[1]], beta_i[m[1]], gamma)
+x2_real_twenty <- x(y2_real_twenty, alpha_i[n[1]], beta_i[n[1]], gamma)
+x3_real_twenty <- x(y3_real_twenty, alpha_i[o[1]], beta_i[o[1]], gamma)
+x_hat_real_twenty[i] <- (x1_real_twenty + x2_real_twenty + x3_real_twenty) / 3
+
+c1i_sim <- beta_i^2 * 20^2 * (gamma^4 - gamma^2) + sigma_e2
+c2i_sim <- c1i_sim / (beta_i^2*20^2)
+c3i_sim <- log((1 + sqrt(1 + 4*c2i_sim)) / 2)
+
+sum1_sim <- log(y1_real_twenty - alpha_i[1]) / sqrt(c3i_sim[1]) +
+  log(y2_real_twenty - alpha_i[2]) / sqrt(c3i_sim[2]) +
+  log(y3_real_twenty - alpha_i[3]) / sqrt(c3i_sim[3])
+
+# lower bound
+
+f1_sim <- function (x) {
+  sum1_sim - log(beta_i[1] * x) / sqrt(c3i_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i_sim[3]) -
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+cll20_sim <- uniroot(f1_sim, lower = 0.1, upper = 10000000)$root
+
+# upper bound
+
+f2_sim <- function (x) {
+  sum1_sim - log(beta_i[1] * x) / sqrt(c3i_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i_sim[3]) +
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+clu20_sim <- uniroot(f2_sim, lower = 0.1, upper = 10000000)$root
+
+if ((x_hat_real_twenty < clu20_sim) & (x_hat_real_twenty > cll20_sim)) {
+  scl_twenty[i] <- 1
+}
+
+## Simulated Confidence interval for 20 ug / L concentration
+
+y1_sim_twenty <- y_twenty[m[1], m[2]]
+y2_sim_twenty <- y_twenty[n[1], n[2]]
+y3_sim_twenty <- y_twenty[o[1], o[2]]
+
+## Real X hat
+y1_real_twenty <- twenty[m[1]*m[2], ]$Real
+y2_real_twenty <- twenty[n[1]*n[2], ]$Real
+y3_real_twenty <- twenty[o[1]*o[2], ]$Real
+
+x1_real_twenty <- x(y1_real_twenty, alpha_i[m[1]], beta_i[m[1]], gamma)
+x2_real_twenty <- x(y2_real_twenty, alpha_i[n[1]], beta_i[n[1]], gamma)
+x3_real_twenty <- x(y3_real_twenty, alpha_i[o[1]], beta_i[o[1]], gamma)
+x_hat_real_twenty[i] <- (x1_real_twenty + x2_real_twenty + x3_real_twenty) / 3
+
+c1i_sim <- beta_i^2 * 20^2 * (gamma^4 - gamma^2) + sigma_e2
+c2i_sim <- c1i_sim / (beta_i^2*20^2)
+c3i_sim <- log((1 + sqrt(1 + 4*c2i_sim)) / 2)
+
+sum1_sim <- log(y1_real_twenty - alpha_i[1]) / sqrt(c3i_sim[1]) +
+  log(y2_real_twenty - alpha_i[2]) / sqrt(c3i_sim[2]) +
+  log(y3_real_twenty - alpha_i[3]) / sqrt(c3i_sim[3])
+
+# lower bound
+
+f1_sim <- function (x) {
+  sum1_sim - log(beta_i[1] * x) / sqrt(c3i_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i_sim[3]) -
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+cll20_sim <- uniroot(f1_sim, lower = 0.1, upper = 10000000)$root
+
+# upper bound
+
+f2_sim <- function (x) {
+  sum1_sim - log(beta_i[1] * x) / sqrt(c3i_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i_sim[3]) +
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+clu20_sim <- uniroot(f2_sim, lower = 0.1, upper = 10000000)$root
+
+if ((x_hat_real_twenty < clu20_sim) & (x_hat_real_twenty > cll20_sim)) {
+  scl_twenty[i] <- 1
+}
+
+## Simulated Confidence interval for 100 ug / L concentration
+
+y1_sim_hundred <- y_hundred[m[1], m[2]]
+y2_sim_hundred <- y_hundred[n[1], n[2]]
+y3_sim_hundred <- y_hundred[o[1], o[2]]
+
+## Real X hat
+y1_real_hundred <- hundred[m[1]*m[2], ]$Real
+y2_real_hundred <- hundred[n[1]*n[2], ]$Real
+y3_real_hundred <- hundred[o[1]*o[2], ]$Real
+
+x1_real_hundred <- x(y1_real_hundred, alpha_i[m[1]], beta_i[m[1]], gamma)
+x2_real_hundred <- x(y2_real_hundred, alpha_i[n[1]], beta_i[n[1]], gamma)
+x3_real_hundred <- x(y3_real_hundred, alpha_i[o[1]], beta_i[o[1]], gamma)
+x_hat_real_hundred[i] <- (x1_real_hundred + x2_real_hundred + x3_real_hundred) / 3
+
+c1i2_sim <- beta_i^2 * 100^2 * (gamma^4 - gamma^2) + sigma_e2
+c2i2_sim <- c1i2_sim / (beta_i^2*100^2)
+c3i2_sim <- log((1 + sqrt(1 + 4*c2i2_sim)) / 2)
+
+sum2_sim <- log(y1_real_hundred - alpha_i[1]) / sqrt(c3i2_sim[1]) +
+  log(y2_real_hundred - alpha_i[2]) / sqrt(c3i2_sim[2]) +
+  log(y3_real_hundred - alpha_i[3]) / sqrt(c3i2_sim[3])
+
+# lower bound
+
+f1_sim_hundred <- function (x) {
+  sum2_sim - log(beta_i[1] * x) / sqrt(c3i2_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i2_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i2_sim[3]) -
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+cll100_sim <- uniroot(f1_sim_hundred, lower = 0.1, upper = 10000000)$root
+
+# upper bound
+
+f2_sim_hundred <- function (x) {
+  sum2_sim - log(beta_i[1] * x) / sqrt(c3i2_sim[1]) -
+    log(beta_i[2] * x) / sqrt(c3i2_sim[2]) -
+    log(beta_i[3] * x) / sqrt(c3i2_sim[3]) +
+    1.96*sqrt(3)
+}
+
+# solve for x
+
+clu100_sim <- uniroot(f2_sim_hundred, lower = 0.1, upper = 10000000)$root
+
+if ((x_hat_real_hundred < clu100_sim) & (x_hat_real_hundred > cll100_sim)) {
+  scl_hundred[i] <- 1
+}
+
 }
 
 scl_low <- sum(scl_low) / 1000
+scl_20 <- sum(scl_twenty) / 1000
+scl_100 <- sum(scl_hundred) / 1000
 
 ```
 
 
-Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100 $\mu g/L$ true concentration level, respectively.
+Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100 $\mu g/L$ true concentration level, respectively. 95% confidence interval for $X$ is (`r CL_low`), (`r CL_20`), (`r CL_100`), respectively.
 
-\cite{Bhaumik2005} proposed a method for constructing confidence regions, which is an approximation based on a normal or lognormal distribution.
+\cite{Bhaumik2005} proposed a method for constructing confidence regions, which is an approximation based on a normal or log-normal distribution.
 
 Firstly, to construct a confidence region for low-level concentrations, let $Y_{i0}$ be an observation collected from the $i$th laboratory with low-level true concentration.  Define
 
@@ -632,7 +798,7 @@ Thus $Z_i(X)\sim N(0,1)$ and the approximate distribution of $Z(X)=\sum_{i=1}^{q
 
 # Results and Discussions
 
-The Original Results of the analysis of interlaboratory data for Cadmium given in \cite{Bhaumik2005}'s Paper are shown in the table below:
+The Original Results of the analysis of interlaboratory data for Cadmium given in \cite{Bhaumik2005} are shown in the table below:
 
 ```{r, echo = F}
 ## make a table
@@ -656,13 +822,13 @@ This table displays point estimates, variances, and simulated confidence levels.
 \item The simulated confidence levels are close to the intended confidence level of $95\%$.
 \end{itemize}
 
-Our results are summarized in a table using the same format in below:
+Our results are summarized in a table using the same format as below:
 
 ```{r, echo = F}
 ## make a table
 x <- matrix(round(c(x_hat, variance, cll, clu, scl_low, x_hat2, 
-                    variance2, cll20, clu20, NA,
-                    x_hat3, variance3, cll100, clu100, NA), 4), 
+                    variance2, cll20, clu20, scl_20,
+                    x_hat3, variance3, cll100, clu100, scl_100), 3), 
             3, 5, byrow = T)
 x <- as.matrix(cbind(c('0 ug/L', '20 ug/L', '100 ug/L'), x))
 colnames(x) <- c('True Concentration','X_hat', 'Var(X)', 'CI Lower Bound',
@@ -670,7 +836,9 @@ colnames(x) <- c('True Concentration','X_hat', 'Var(X)', 'CI Lower Bound',
 kable(x, format = 'pandoc')
 ```
 
-We can see that our results are very close to theirs.
+We may notice that point estimate for $X$_hat at 0 $\mu g/L$ is negative, this is because we subjectively choose the first replicate from the first three laboratories, thus there may be some bias in estimation. But overall, we can see that our results are very close to theirs.
+
+\newpage
 
 # References
 
