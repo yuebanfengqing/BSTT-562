@@ -168,7 +168,7 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
 
-```{r, echo = FALSE}
+```{r, echo = T}
 low <- p1.data[p1.data$Concentration == 0,]
 
 ave <- 0
@@ -190,8 +190,8 @@ alpha_i <- ave # estimates of alpha_i
 
 low$alpha_i <- rep(alpha_i, each = max(low$Lab))
 
-########################### estimation for the higher concentrations ######################
-##################################### beta_i, sigma_eta2 ##################################
+##### estimation for the higher concentrations #####
+##### beta_i, sigma_eta2 #####
 
 higher <- p1.data[p1.data$Concentration != 0, ]
 
@@ -235,7 +235,8 @@ for (i in 1:max(twenty$Lab)) {
 
 sigma_zi2100 <- 0
 for (i in 1:max(hundred$Lab)) {
-  sigma_zi2100[i] <- sum((hundred$z_ijk[hundred$Lab == i] - hundred$mu_zij[hundred$Lab == i])^2 / (n_ij - 1))
+  sigma_zi2100[i] <- sum((hundred$z_ijk[hundred$Lab == i] 
+                          - hundred$mu_zij[hundred$Lab == i])^2 / (n_ij - 1))
 }
 
 # sigma_zi2100 # sigma_zi2100
@@ -304,6 +305,8 @@ var(\hat{X}) &= E[var(\hat{X}/y)] + var[E[\hat{X}]/y] \\
 
 where $y$ is the vector of past observations, $var(\hat{X})/y$ is the conditional variance of $\hat{X}$ given $y$, and $E(\hat{X}/y)$ is the conditional expectation of $\hat{X}$ given $y$. The variance of $\hat{X}$ in equation (\ref{eq-13a}) depends on $X$ and increases with increasing levels of concentrations.
 
+## Variance and Confidence Interval of $X$
+
 ```{r, echo = TRUE, warning = FALSE}
 ########################### estimation of x ###############################
 ########## choose 1st observation of each lab as new observation ##########
@@ -326,11 +329,6 @@ x3 <- x(y3$Real, y3$alpha_i, y3$beta_i, gamma)
 x_hat <- (x1 + x2 + x3) / 3
 # x_hat
 
-```
-
-## Variance and Confidence Interval of $X$
-
-```{r, echo = TRUE, warning = FALSE}
 ## variance
 
 variance <- ((sigma_e2 / (y1$beta_i^2 * gamma^2)*(1 + 1 / 5) 
@@ -468,10 +466,6 @@ f4 <- function (x) {
 clu100 <- uniroot(f4, lower = 0.1, upper = 10000000)$root
 
 CL_100 <- round(c(cll100, clu100), 3)
-
-```
-
-```{r, echo = T, warning = FALSE}
 
 x <- function(y, alpha, beta, gamma) {
   xi_hat <- (y - alpha) / (beta * gamma)
