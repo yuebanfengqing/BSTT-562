@@ -168,7 +168,80 @@ To estimate $\beta_i$ and $\sigma_\eta$ from equation (\ref{eq11-1}), we need es
 \hat{\beta}_i=\sqrt{\frac{\hat{\mu}_{z_i}^4}{\hat{\sigma}^2_{z_i}-\hat{\sigma}_\mu^2+\hat{\mu}^2_{z_i}}} \ \text{and} \ \hat{\sigma}_{\eta}^2 = \frac{2\sum_{i=1}^qln(\hat{\mu}_{z_i}/\hat{\beta}_i)}{q} 
 \end{equation}
 
-```{r, echo = T}
+
+## Point Estimation of $X$
+
+Suppose that the same analyte with an unknown true concentration $X$ is tested in $q^{'}$ independent laboratories, and that $Y_1,Y_2,...,Y_{q^{'}}$ are the corresponding new observations. We want to compute a point estimate of $X$ using the available information from each of the $q^{'}$ laboratories and then combine them. Following model (\ref{eq-2a}), we can obtain
+
+$$
+E(Y_i) = \alpha_i + \beta_iX\gamma,
+$$
+
+and hence an estimate of $X$ from the $i$-th laboratory, denoted by $\hat{X}_i$, is
+
+\begin{equation}
+\hat{X}_i = \frac{Y_i-\hat{\alpha}_i}{\hat{\beta}_i\hat{\gamma}} \ \text{and} \ \hat{X} = \displaystyle\sum_{i=1}^{q^{'}} \frac{\hat{X}_i}{q^{'}},
+\end{equation}
+
+where $\hat{X}$ is the combined estimate of $X$. $\hat{X}_i$ is asymptotically unbiased, and the asymptotic expression of the variance of $\hat{X}$ is 
+
+\begin{align}
+\begin{split}
+\label{eq-13a}
+var(\hat{X}) &= E[var(\hat{X}/y)] + var[E[\hat{X}]/y] \\
+&= \frac{\sum_{i=1}^{q^{'}}\sigma_e^2/(\beta_i^2\gamma^2)(1+1/n_{0i})}{q^{'2}} + \frac{X^2(\gamma^2-1)}{q^{'}},
+\end{split}
+\end{align}
+
+where $y$ is the vector of past observations, $var(\hat{X})/y$ is the conditional variance of $\hat{X}$ given $y$, and $E(\hat{X}/y)$ is the conditional expectation of $\hat{X}$ given $y$. The variance of $\hat{X}$ in equation (\ref{eq-13a}) depends on $X$ and increases with increasing levels of concentrations.
+
+## Variance and Confidence Interval of $X$
+
+\cite{Bhaumik2005} proposed a method for constructing confidence regions, which is an approximation based on a normal or log-normal distribution.
+
+Firstly, to construct a confidence region for low-level concentrations, let $Y_{i0}$ be an observation collected from the $i$th laboratory with low-level true concentration.  Define
+
+$$
+\bar{Y}_0 = \sum_{i=1}^{q^{'}} Y_{i0}/n_{0}.,
+$$
+
+where $n_0$ is the total number of measurements for low-level true concentration from all $q^{'}$ laboratories. For a low-level true concentration $X_0$, the $(1-\alpha)100\%$ confidence region of $X_0$ is
+
+$$
+(max(0,\bar{Y}_0-z_{\alpha/2}\sqrt{(\hat{\sigma}_e^2+\hat{\sigma}_{\alpha}^2)/n_0}),\bar{y}_0+z_{\alpha/2}\sqrt{(\hat{\sigma}_e^2+\hat{\sigma}_{\alpha}^2)/n_0}).
+$$
+
+$\hat{\sigma}_{\alpha}^2$ represents the variability of $\alpha_i$ across all $q$ laboratories in the calibration sample.
+
+Secondly, to construct a confidence region for larger $X$, \cite{Bhaumik2005} used the following lognormal approximation. Let 
+
+$$
+c_{1i} = var(Y_i) = \beta^2_iX^2(\gamma^4-\gamma^2)+\sigma_e^2, c_{2i} = \frac{c_{1i}}{\beta_2^iX^2}, and \ c_{3i} = ln(\frac{1+\sqrt{1+4c_{2i}}}{2}).
+$$
+
+\cite{Bhaumik2005} also showed in a lemma that the approximate variance of $ln(\frac{Y-\alpha_i}{\beta_iX})$ is $c_{3i}$.
+
+\textit{Lemma 1.} Suppose that for an unknown concentration $X$, the corresponding observation $Y_i$ collected from the $i$th laboratory follows model (\ref{eq-2a}). Define $V_i = ln(\frac{Y_i-\alpha_i}{\beta_iX}).$ For a larger concentration $X$, the approximate variance of $V_i$ is $c_{3i}.$ 
+
+\textit{Proof.} For a larger concentration $X$, the corresponding $e_i$ in model (\ref{eq-2a}) becomes insignificant compared to $Xe^{\eta_i}$, and hence the approximate distribution of $(\frac{Y_i-\alpha_i}{\beta_iX})$ is lognormal. Using the expression for the variance of a lognormal distribution, $c_{2i}=var(\frac{Y_i-\alpha_i}{\beta_iX})$ can be expressed as $v^2-v,$ for a positive number $v.$ The positive root of the quadratic equation $c_{2i}=v^2-v$ is $\frac{1+\sqrt{1+4c_{2i}}}{2},$ and hence the variance of $ln(\frac{Y_i-\alpha_i}{\beta_iX})$ is $c_{3i}.$
+
+Let
+
+\begin{equation}
+\label{eq-14a}
+Z_i(X) = \frac{ln((Y_i-\alpha_i)/\beta_iX)}{\sqrt{c_{3i}}} = \frac{ln(Y_i-\alpha_i)-ln(\beta_iX)}{\sqrt{c_{3i}}}.
+\end{equation}
+
+Thus $Z_i(X)\sim N(0,1)$ and the approximate distribution of $Z(X)=\sum_{i=1}^{q^{'}} Z_i(X)/\sqrt{q^{'}} \sim N(0,1),$ where $N(0,1)$ denotes a standard normal distribution. We replace the parameters on the right side of (\ref{eq-14a}) by their corresponding estimates to compute their numerical values. Thus the $(1-\alpha)100\%$ confidence region for $X$ is 
+
+\begin{equation}
+\label{eq-15a}
+\mathcal{R}(X) = \left\{X: -Z_{\alpha/2} \leq Z(X) \leq Z_{\alpha/2} \right\}.
+\end{equation}
+
+# Codes
+
+```{r, echo = TRUE, warning = FALSE}
 low <- p1.data[p1.data$Concentration == 0,]
 
 ave <- 0
@@ -277,37 +350,7 @@ gamma <- exp(sigma_eta2 / 2)
 # sigma_eta2
 # # gamma:
 # gamma
-```
 
-## Point Estimation of $X$
-
-Suppose that the same analyte with an unknown true concentration $X$ is tested in $q^{'}$ independent laboratories, and that $Y_1,Y_2,...,Y_{q^{'}}$ are the corresponding new observations. We want to compute a point estimate of $X$ using the available information from each of the $q^{'}$ laboratories and then combine them. Following model (\ref{eq-2a}), we can obtain
-
-$$
-E(Y_i) = \alpha_i + \beta_iX\gamma,
-$$
-
-and hence an estimate of $X$ from the $i$-th laboratory, denoted by $\hat{X}_i$, is
-
-\begin{equation}
-\hat{X}_i = \frac{Y_i-\hat{\alpha}_i}{\hat{\beta}_i\hat{\gamma}} \ \text{and} \ \hat{X} = \displaystyle\sum_{i=1}^{q^{'}} \frac{\hat{X}_i}{q^{'}},
-\end{equation}
-
-where $\hat{X}$ is the combined estimate of $X$. $\hat{X}_i$ is asymptotically unbiased, and the asymptotic expression of the variance of $\hat{X}$ is 
-
-\begin{align}
-\begin{split}
-\label{eq-13a}
-var(\hat{X}) &= E[var(\hat{X}/y)] + var[E[\hat{X}]/y] \\
-&= \frac{\sum_{i=1}^{q^{'}}\sigma_e^2/(\beta_i^2\gamma^2)(1+1/n_{0i})}{q^{'2}} + \frac{X^2(\gamma^2-1)}{q^{'}},
-\end{split}
-\end{align}
-
-where $y$ is the vector of past observations, $var(\hat{X})/y$ is the conditional variance of $\hat{X}$ given $y$, and $E(\hat{X}/y)$ is the conditional expectation of $\hat{X}$ given $y$. The variance of $\hat{X}$ in equation (\ref{eq-13a}) depends on $X$ and increases with increasing levels of concentrations.
-
-## Variance and Confidence Interval of $X$
-
-```{r, echo = TRUE, warning = FALSE}
 ########################### estimation of x ###############################
 ########## choose 1st observation of each lab as new observation ##########
 
@@ -747,52 +790,7 @@ scl_100 <- sum(scl_hundred) / 1000
 
 ```
 
-
-Variance for $X$ is `r variance`, `r variance2`, `r variance3` for 0, 20, 100 $\mu g/L$ true concentration level, respectively. 95% confidence interval for $X$ is (`r CL_low`), (`r CL_20`), (`r CL_100`), respectively.
-
-\cite{Bhaumik2005} proposed a method for constructing confidence regions, which is an approximation based on a normal or log-normal distribution.
-
-Firstly, to construct a confidence region for low-level concentrations, let $Y_{i0}$ be an observation collected from the $i$th laboratory with low-level true concentration.  Define
-
-$$
-\bar{Y}_0 = \sum_{i=1}^{q^{'}} Y_{i0}/n_{0}.,
-$$
-
-where $n_0$ is the total number of measurements for low-level true concentration from all $q^{'}$ laboratories. For a low-level true concentration $X_0$, the $(1-\alpha)100\%$ confidence region of $X_0$ is
-
-$$
-(max(0,\bar{Y}_0-z_{\alpha/2}\sqrt{(\hat{\sigma}_e^2+\hat{\sigma}_{\alpha}^2)/n_0}),\bar{y}_0+z_{\alpha/2}\sqrt{(\hat{\sigma}_e^2+\hat{\sigma}_{\alpha}^2)/n_0}).
-$$
-
-$\hat{\sigma}_{\alpha}^2$ represents the variability of $\alpha_i$ across all $q$ laboratories in the calibration sample.
-
-Secondly, to construct a confidence region for larger $X$, \cite{Bhaumik2005} used the following lognormal approximation. Let 
-
-$$
-c_{1i} = var(Y_i) = \beta^2_iX^2(\gamma^4-\gamma^2)+\sigma_e^2, c_{2i} = \frac{c_{1i}}{\beta_2^iX^2}, and \ c_{3i} = ln(\frac{1+\sqrt{1+4c_{2i}}}{2}).
-$$
-
-\cite{Bhaumik2005} also showed in a lemma that the approximate variance of $ln(\frac{Y-\alpha_i}{\beta_iX})$ is $c_{3i}$.
-
-\textit{Lemma 1.} Suppose that for an unknown concentration $X$, the corresponding observation $Y_i$ collected from the $i$th laboratory follows model (\ref{eq-2a}). Define $V_i = ln(\frac{Y_i-\alpha_i}{\beta_iX}).$ For a larger concentration $X$, the approximate variance of $V_i$ is $c_{3i}.$ 
-
-\textit{Proof.} For a larger concentration $X$, the corresponding $e_i$ in model (\ref{eq-2a}) becomes insignificant compared to $Xe^{\eta_i}$, and hence the approximate distribution of $(\frac{Y_i-\alpha_i}{\beta_iX})$ is lognormal. Using the expression for the variance of a lognormal distribution, $c_{2i}=var(\frac{Y_i-\alpha_i}{\beta_iX})$ can be expressed as $v^2-v,$ for a positive number $v.$ The positive root of the quadratic equation $c_{2i}=v^2-v$ is $\frac{1+\sqrt{1+4c_{2i}}}{2},$ and hence the variance of $ln(\frac{Y_i-\alpha_i}{\beta_iX})$ is $c_{3i}.$
-
-Let
-
-\begin{equation}
-\label{eq-14a}
-Z_i(X) = \frac{ln((Y_i-\alpha_i)/\beta_iX)}{\sqrt{c_{3i}}} = \frac{ln(Y_i-\alpha_i)-ln(\beta_iX)}{\sqrt{c_{3i}}}.
-\end{equation}
-
-Thus $Z_i(X)\sim N(0,1)$ and the approximate distribution of $Z(X)=\sum_{i=1}^{q^{'}} Z_i(X)/\sqrt{q^{'}} \sim N(0,1),$ where $N(0,1)$ denotes a standard normal distribution. We replace the parameters on the right side of (\ref{eq-14a}) by their corresponding estimates to compute their numerical values. Thus the $(1-\alpha)100\%$ confidence region for $X$ is 
-
-\begin{equation}
-\label{eq-15a}
-\mathcal{R}(X) = \left\{X: -Z_{\alpha/2} \leq Z(X) \leq Z_{\alpha/2} \right\}.
-\end{equation}
-
-# Results and Discussions
+# Results 
 
 The Original Results of the analysis of interlaboratory data for Cadmium given in \cite{Bhaumik2005} are shown in the table below:
 
@@ -822,7 +820,7 @@ This table displays point estimates, variances, and simulated confidence levels.
 \item The simulated confidence levels are close to the intended confidence level of $95\%$.
 \end{itemize}
 
-Our results are summarized in a table using the same format as below:
+Our results show that the estimated variances for $X$ are `r variance`, `r variance2`, `r variance3` at 0, 20, 100 $\mu g/L$ true concentration level, respectively. The simulated 95% confidence interval for $X$ are (`r CL_low`), (`r CL_20`), (`r CL_100`), respectively. The entire results are summarized in a table using the same format below:
 
 \begin{center}
 \textbf{Table: \textit{Our Results}}
