@@ -1,5 +1,5 @@
 ---
-title: "BSTT562 Project I"
+title: "BSTT562 Final Project I"
 author: "Ruizhe Chen, Hesen Li"
 date: "December 14th, 2018"
 documentclass: article
